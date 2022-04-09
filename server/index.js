@@ -8,9 +8,9 @@ const app = express();
 const apiRouter = require("./src/routes/api.routes");
 
 const MainDB = require('./src/api/db')
-const DBO = new MainDB('./db/test.db')
+const DBO = MainDB
 
-DBO.db.all('SELECT * FROM test', (error, rows) => {
+DBO.db.all('SELECT * FROM contacts', (error, rows) => {
     console.log(error, rows)
 })
 

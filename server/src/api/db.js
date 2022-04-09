@@ -12,4 +12,4 @@ class MainDB {
   }
 }
 
-module.exports = MainDB
+module.exports = new MainDB('./db/test2.db');

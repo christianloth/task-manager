@@ -10,7 +10,9 @@ const apiRouter = require("./src/routes/api.routes");
 const MainDB = require('./src/api/db')
 const DBO = new MainDB('./db/test.db')
 
-// DBO.db.run
+DBO.db.all('SELECT * FROM test', (error, rows) => {
+    console.log(error, rows)
+})
 
 // Setting CORS to allow all connection
 app.use((req, res, next) => {

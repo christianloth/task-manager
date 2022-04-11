@@ -4,5 +4,5 @@ CREATE TABLE task (
     group_id INTEGER FOREIGN key REFERENCES groups(group_id),
     category_id INTEGER FOREIGN KEY REFERENCES category(category_id),
     task_name TEXT NOT NULL,
-    descriptions TEXT,
+    descriptions TEXT
 );

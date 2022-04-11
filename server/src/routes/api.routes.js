@@ -9,17 +9,23 @@ router.get("/", (req, res) => {
     res.status(200).send("GOT");
 });
 
-router.get("/users", (req, res) => {
+// router.get("/:id", (req, res) => {
+//     console.log(req.params.id);
+//     res.status(200).send("GOT");
+// });
+
+router.get("/contacts", (req, res) => {
     // write code to query
-    res.json({
-        users: [
-            { name: "Reo", age: 10 },
-            { name: "Yijin", age: 11 },
-        ],
-    });
+
+    const sql = `SELECT * FROM contacts`;
+    MainDB.db.all(sql, (err, rows) => {
+        if (err) res.status(401).send(err)
+
+        res.json(rows);
+    })
 });
 
-router.post("/create/users", (req, res) => {
+router.post("/create/contacts", (req, res) => {
     const { id, first_name, last_name, email, phone } = req.body;
     const sql = `INSERT INTO contacts (contact_id, first_name, last_name, email, phone)
 VALUES (${id}, "${first_name}", "${last_name}", "${email}", "${phone}")`;

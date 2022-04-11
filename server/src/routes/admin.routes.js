@@ -18,7 +18,7 @@ router.get("/admin", (req, res) => {
         ],
     });
 });
-router.post("/create/admin", (req, res) => {
+router.post("/create", (req, res) => {
     const { admin_id ,user_id, group_id} = req.body;
     const sql = `INSERT INTO admin (admin_id ,user_id, group_id)
 VALUES ("${admin_id}","${user_id}", "${group_id}")`;

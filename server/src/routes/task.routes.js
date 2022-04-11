@@ -18,7 +18,7 @@ router.get("/task", (req, res) => {
         ],
     });
 });
-router.post("/create/task", (req, res) => {
+router.post("/create", (req, res) => {
     const { task_id, user_id, group_id, category_id, task_name, descriptions} = req.body;
     const sql = `INSERT INTO event (task_id, user_id, group_id, category_id, task_name, descriptions)
 VALUES ("${task_id}", "${user_id}", "${group_id}", "${category_id}", "${task_name}", "${descriptions}")`;

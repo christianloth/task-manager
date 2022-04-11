@@ -18,7 +18,7 @@ router.get("/group_member", (req, res) => {
         ],
     });
 });
-router.post("/create/group_member", (req, res) => {
+router.post("/create", (req, res) => {
     const { grouplist_id ,group_id, user_id} = req.body;
     const sql = `INSERT INTO group_member (grouplist_id ,group_id, user_id)
 VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;

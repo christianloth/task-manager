@@ -6,5 +6,5 @@ CREATE TABLE events (
     event_date TEXT NOT NULL,
     event_time TEXT NOT NULL,
     event_location TEXT NOT NULL,
-    group_id INTEGER FOREIGN KEY REFERENCES groups(group_id),
+    group_id INTEGER FOREIGN KEY REFERENCES groups(group_id)
 );

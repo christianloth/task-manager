@@ -25,10 +25,26 @@ router.get("/contacts", (req, res) => {
     })
 });
 
+
+router.post("/create/user", (req, res) => {
+    const { user_id, username, first_name, last_name, pass_word, email } = req.body;
+    const sql = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email)
+VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
+    MainDB.db.run(sql, (err) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        // get the last insert id
+        console.log("Create user");
+    });
+    res.send(sql);
+});
+
+
 router.post("/create/contacts", (req, res) => {
     const { id, first_name, last_name, email, phone } = req.body;
     const sql = `INSERT INTO contacts (contact_id, first_name, last_name, email, phone)
-VALUES (${id}, "${first_name}", "${last_name}", "${email}", "${phone}")`;
+VALUES ("${id}", "${first_name}", "${last_name}", "${email}", "${phone}")`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

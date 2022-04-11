@@ -4,5 +4,5 @@ CREATE TABLE users (
 	first_name TEXT NOT NULL,
 	last_name TEXT NOT NULL,
     pass_word TEXT NOT NULL,
-	email TEXT NOT NULL UNIQUE,
+	email TEXT NOT NULL UNIQUE
 );

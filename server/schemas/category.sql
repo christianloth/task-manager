@@ -3,5 +3,5 @@ CREATE TABLE category (
     group_id INTEGER FOREIGN KEY REFERENCES groups(group_id),
     category_name TEXT NOT NULL,
     descriptions TEXT,
-    create_data TEXT NOT NULL,
+    create_date TEXT NOT NULL,
 );

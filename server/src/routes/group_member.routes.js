@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
     res.status(200).send("GOT");
 });
 
-router.get("/users", (req, res) => {
+router.get("/group_member", (req, res) => {
     // write code to query
     res.json({
         users: [
@@ -18,11 +18,10 @@ router.get("/users", (req, res) => {
         ],
     });
 });
-
-router.post("/create/users", (req, res) => {
-    const { id, first_name, last_name, email, phone } = req.body;
-    const sql = `INSERT INTO contacts (contact_id, first_name, last_name, email, phone)
-VALUES (${id}, "${first_name}", "${last_name}", "${email}", "${phone}")`;
+router.post("/create/group_member", (req, res) => {
+    const { grouplist_id ,group_id, user_id} = req.body;
+    const sql = `INSERT INTO group_member (grouplist_id ,group_id, user_id)
+VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

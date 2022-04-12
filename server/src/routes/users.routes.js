@@ -9,43 +9,20 @@ router.get("/", (req, res) => {
     res.status(200).send("GOT");
 });
 
-// router.get("/:id", (req, res) => {
-//     console.log(req.params.id);
-//     res.status(200).send("GOT");
-// });
-
-router.get("/contacts", (req, res) => {
+router.get("/users", (req, res) => {
     // write code to query
-
-    const sql = `SELECT * FROM contacts`;
-    MainDB.db.all(sql, (err, rows) => {
-        if (err) res.status(401).send(err)
-
-        res.json(rows);
-    })
+    res.json({
+        users: [
+            { name: "Reo", age: 10 },
+            { name: "Yijin", age: 11 },
+        ],
+    });
 });
-
-
 router.post("/create", (req, res) => {
-    let { user_id, username, first_name, last_name, pass_word, email } = req.body;
+    const { user_id, username, first_name, last_name, pass_word, email } = req.body;
     console.log(req.body);
     const sql = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email)
 VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
-    MainDB.db.run(sql, (err) => {
-        if (err) {
-            return console.log(err.message);
-        }
-        // get the last insert id
-        console.log("Create user");
-    });
-    res.send(sql);
-});
-
-
-router.post("/create/contacts", (req, res) => {
-    const { id, first_name, last_name, email, phone } = req.body;
-    const sql = `INSERT INTO contacts (contact_id, first_name, last_name, email, phone)
-VALUES ("${id}", "${first_name}", "${last_name}", "${email}", "${phone}")`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

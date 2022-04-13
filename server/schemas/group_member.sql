@@ -1,5 +1,7 @@
 CREATE TABLE group_member (
     grouplist_id INTEGER PRIMARY KEY,
-    user_id INTEGER FOREIGN KEY REFERENCES users(user_id),
-    group_id INTEGER FOREIGN KEY REFERENCES groups(group_id)
+    user_id INTEGER,
+    group_id INTEGER,
+    FOREIGN KEY(user_id) REFERENCES users(user_id),
+    FOREIGN KEY(group_id) REFERENCES groups(group_id)
 );

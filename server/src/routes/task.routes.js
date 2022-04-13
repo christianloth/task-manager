@@ -19,9 +19,9 @@ router.get("/task", (req, res) => {
     });
 });
 router.post("/create", (req, res) => {
-    const { task_id, user_id, group_id, category_id, task_name, descriptions} = req.body;
-    const sql = `INSERT INTO event (task_id, user_id, group_id, category_id, task_name, descriptions)
-VALUES ("${task_id}", "${user_id}", "${group_id}", "${category_id}", "${task_name}", "${descriptions}")`;
+    const { task_id, user_id, category_id, task_name, descriptions} = req.body;
+    const sql = `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions)
+VALUES ("${task_id}", "${user_id}", "${category_id}", "${task_name}", "${descriptions}")`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

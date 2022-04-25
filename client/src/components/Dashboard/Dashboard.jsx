@@ -6,6 +6,7 @@ import { CategoryList } from "./CategoryList";
 import { GroupList } from "./GroupList";
 import { Header } from "./Header";
 
+
 const groups = Array(20).fill('').map((_, i) => {
     return {name: `CSCE 310 - Group ${i+1}`, icon: i % 2 ? 'phone' : '', memberCount: Math.floor(Math.random() * 10)}
 })

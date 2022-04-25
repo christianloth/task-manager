@@ -17,7 +17,7 @@ const adminRouter = require("./src/routes/admin.routes");
 const MainDB = require('./src/api/db')
 const DBO = MainDB
 
-DBO.db.all('SELECT * FROM contacts', (error, rows) => {
+DBO.db.all('SELECT * FROM users', (error, rows) => {
     console.log(error, rows)
 })
 

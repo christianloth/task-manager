@@ -19,7 +19,8 @@ router.get("/users", (req, res) => {
     });
 });
 router.post("/create", (req, res) => {
-    const { user_id, username, first_name, last_name, pass_word, email } = req.body;
+    const { user_id, username, first_name, last_name, pass_word, email } =
+        req.body;
     console.log(req.body);
     const sql = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email)
 VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;

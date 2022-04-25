@@ -5,13 +5,8 @@ const MainDB = require("../api/db");
 
 // Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
-    console.log("GOT");
-    res.status(200).send("GOT");
-});
-
-router.get("/group", (req, res) => {
     // write code to query
-    MainDB.db.all("SELECT * FROM group", (err, rows) => {
+    MainDB.db.all("SELECT * FROM groups", (err, rows) => {
         if (err) return err;
 
         res.json({

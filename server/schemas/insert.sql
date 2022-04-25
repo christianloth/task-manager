@@ -20,3 +20,9 @@ insert into users (user_id, username, first_name, last_name, pass_word, email) v
 insert into users (user_id, username, first_name, last_name, pass_word, email) values (20, 'jlabdonj', 'Jarrod', 'Labdon', '88yM4Y', 'jlabdonj@sitemeter.com');
 
 
+
+insert into groups (group_id, user_id, group_name, descriptions, icon) values (1, 1, 'Oyoba', 'league of legend', 'Zathin');
+insert into groups (group_id, user_id, group_name, descriptions, icon) values (2, 5, 'Babbleset', 'go home', 'Tempsoft');
+insert into groups (group_id, user_id, group_name, descriptions, icon) values (3, 8, 'Eabox', 'a group for assignment', 'Fix San');
+insert into groups (group_id, user_id, group_name, descriptions, icon) values (4, 9, 'Voonte', 'group for HW3', 'Daltfresh');
+insert into groups (group_id, user_id, group_name, descriptions, icon) values (5, 13, 'Kamba', 'group for picnic', 'Voltsillam');

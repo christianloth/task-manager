@@ -28,5 +28,18 @@ VALUES ("${group_id}", "${user_id}", "${group_name}", "${description}")`;
     });
     res.send(sql);
 });
+router.delete("/:group_id", (req, res) => {
+    // write code to query
+    const {task_id} = req.params;
+    const sql = `DELETE FROM group WHERE group_id = "${group_id}"`;
+    MainDB.db.run(sql, (err) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        // get the last insert id
+        console.log(`A row has been deleted!`);
+    });
+    res.send(sql);
+});
 
 module.exports = router;

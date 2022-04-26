@@ -14,8 +14,9 @@ router.get("/", (req, res) => {
         });
     });
 });
+
 router.post("/create", (req, res) => {
-    const { group_id, user_id, group_name, description} = req.body;
+    const { group_id, user_id, group_name, description } = req.body;
     const sql = `INSERT INTO group (group_id, user_id, group_name, description)
 VALUES ("${group_id}", "${user_id}", "${group_name}", "${description}")`;
     MainDB.db.run(sql, (err) => {

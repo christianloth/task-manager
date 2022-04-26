@@ -15,7 +15,7 @@ import {
 import { BsFillPersonFill } from "react-icons/bs";
 import GroupIcon from "./GroupIcon";
 
-export function Header({ group }) {
+export function Header({ icon, name, memberCount }) {
     const iconSize = 10;
     const textSize = "lg";
     const bg = useColorModeValue("gray.300", "blue.700");
@@ -32,19 +32,19 @@ export function Header({ group }) {
             alignItems={"center"}
         >
             <Flex alignItems={"center"} gap={4}>
-                <GroupIcon icon={group.icon} color={"black"} bg={"white"} />
-                <Heading size={textSize}>{group.name}</Heading>
+                <GroupIcon icon={icon} color={"black"} bg={"white"} />
+                <Heading size={textSize}>{name}</Heading>
             </Flex>
             <Flex alignItems={"center"} gap={2}>
-            <Flex alignItems={"center"} justifyContent={"center"}>
-                <Heading size={textSize}>{group.memberCount}</Heading>
-                <Icon w={iconSize} h={iconSize} as={BsFillPersonFill} />
-            </Flex>
-            <IconButton
-                aria-label="toggle dark mode"
-                icon={colorMode === "dark" ? <MoonIcon /> : <SunIcon />}
-                onClick={toggleColorMode}
-            />
+                <Flex alignItems={"center"} justifyContent={"center"}>
+                    <Heading size={textSize}>{memberCount}</Heading>
+                    <Icon w={iconSize} h={iconSize} as={BsFillPersonFill} />
+                </Flex>
+                <IconButton
+                    aria-label="toggle dark mode"
+                    icon={colorMode === "dark" ? <MoonIcon /> : <SunIcon />}
+                    onClick={toggleColorMode}
+                />
             </Flex>
         </HStack>
     );

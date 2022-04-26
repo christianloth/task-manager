@@ -16,7 +16,8 @@ router.get("/", (req, res) => {
     });
 });
 router.post("/create", (req, res) => {
-    const { category_id ,group_id, category_name,descriptions,create_date} = req.body;
+    const { category_id, group_id, category_name, descriptions, create_date } =
+        req.body;
     const sql = `INSERT INTO category (category_id ,group_id, category_name,descriptions,create_date)
 VALUES ("${category_id}","${group_id}", "${category_name}","${descriptions}", "${create_date}")`;
     MainDB.db.run(sql, (err) => {

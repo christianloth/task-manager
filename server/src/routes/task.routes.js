@@ -14,8 +14,9 @@ router.get("/", (req, res) => {
         });
     });
 });
+
 router.post("/create", (req, res) => {
-    const { task_id, user_id, category_id, task_name, descriptions} = req.body;
+    const { task_id, user_id, category_id, task_name, descriptions } = req.body;
     const sql = `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions)
 VALUES ("${task_id}", "${user_id}", "${category_id}", "${task_name}", "${descriptions}")`;
     MainDB.db.run(sql, (err) => {

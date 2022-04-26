@@ -14,8 +14,8 @@ const categoryRouter = require("./src/routes/category.routes");
 const category_listRouter = require("./src/routes/category_member.routes");
 const adminRouter = require("./src/routes/admin.routes");
 
-const MainDB = require('./src/api/db')
-const DBO = MainDB
+const MainDB = require("./src/api/db");
+const DBO = MainDB;
 
 DBO.db.all('SELECT * FROM users', (error, rows) => {
     console.log(error, rows)
@@ -47,8 +47,6 @@ app.use("/api/event", eventRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/category_member", category_listRouter);
 app.use("/api/admin", adminRouter);
-
-
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

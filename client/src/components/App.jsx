@@ -10,7 +10,6 @@ function App() {
         return <Login setToken={setToken} />;
     }
 
-
     return (
         <Box h={"100vh"}>
             <Routes>

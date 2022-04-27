@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const MainDB = require("../api/db");
+const MainDB = require("../api/db.js");
 
 // Run server and try to go to http://localhost:3001/api/
 
@@ -32,7 +32,7 @@ VALUES ("${admin_id}","${user_id}", "${group_id}")`;
 
 router.delete("/:admin_id", (req, res) => {
     // write code to query
-    const {admin_id} = req.params;
+    const { admin_id } = req.params;
     const sql = `DELETE FROM admin WHERE admin_id = "${admin_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {

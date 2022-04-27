@@ -73,7 +73,7 @@ function Group(props) {
 function GroupList({ groups, onChangeHandle }) {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: "groups",
-        defaultValue: groups[0].group_id,
+        defaultValue: groups[0].group_id + "_group",
         onChange: (e) => {
             onChangeHandle(e);
             console.log(e);
@@ -116,9 +116,8 @@ function GroupList({ groups, onChangeHandle }) {
             <Divider p={1} />
             {groups.map((group, i) => {
                 const { group_id, user_id, group_name, descriptions } = group;
-                const id = group_id + "_radio";
+                const id = group_id + "_group";
                 const radio = getRadioProps({ value: id });
-                console.log(id);
                 return (
                     <Group
                         key={id}

@@ -5,35 +5,32 @@ import { CategoryList } from "./CategoryList";
 import GroupList from "./GroupList";
 import { Header } from "./Header";
 
-// const groups = Array(20)
-//     .fill("")
-//     .map((_, i) => {
-//         return {
-//             name: `CSCE 310 - Group ${i + 1}`,
-//             icon: i % 2 ? "phone" : "",
-//             memberCount: Math.floor(Math.random() * 10),
-//         };
-//     });
+const getGroup = (groups, groupIndex) => {
+    const id = parseInt(groupIndex.split("_")[0]);
+    for (let i = 0; i < groups.length; ++i) {
+        if (groups[i].group_id === id) return groups[i];
+    }
 
-// const getGroup = (groupName) => {
-//     for (let i = 0; i < groups.length; ++i) {
-//         if (groups[i].name === groupName) return groups[i];
-//     }
-
-//     return groups[0];
-// };
+    return groups[0];
+};
 
 export function Dashboard() {
     const [groups, setGroups] = useState([]);
-    const [selectedGroupIndex, setSelectedGroupIndex] = useState(0);
+    const [selectedGroupIndex, setSelectedGroupIndex] = useState("1_group");
 
     useEffect(async () => {
         let data = await fetch("http://localhost:3001/api/group");
         const { rows } = await data.json();
         setGroups(rows);
+        setSelectedGroupIndex(rows[0].group_id + "_group");
     }, []);
 
-    // const selectedGroup = getGroup(selectedGroupName);
+    let selectedGroup = getGroup(groups, selectedGroupIndex);
+    let group_id, user_id, group_name, description;
+    if (selectedGroup)
+        ({ group_id, user_id, group_name, description } = { ...selectedGroup });
+    else group_name = "TEST";
+    console.log(group_name);
 
     return (
         <Flex h={"100%"} p={6} justifyContent="center" alignItems={"center"}>
@@ -44,7 +41,7 @@ export function Dashboard() {
                 ></GroupList>
             )}
             <Flex flexDirection={"column"} flex={1} h={"100%"}>
-                <Header icon="" name="Test" memberCount={0}></Header>
+                <Header icon="" name={group_name} memberCount={0}></Header>
                 <CategoryList group={[]}></CategoryList>
             </Flex>
         </Flex>

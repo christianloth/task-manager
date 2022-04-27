@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const MainDB = require("../api/db");
+const MainDB = require("../api/db.js");
 
 // Run server and try to go to http://localhost:3001/api/
 
@@ -15,6 +15,7 @@ router.get("/", (req, res) => {
         });
     });
 });
+
 router.post("/create", (req, res) => {
     const { grouplist_id, group_id, user_id } = req.body;
     const sql = `INSERT INTO group_member (grouplist_id ,group_id, user_id)
@@ -31,7 +32,7 @@ VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;
 
 router.delete("/:grouplist_id", (req, res) => {
     // write code to query
-    const {grouplist_id} = req.params;
+    const { grouplist_id } = req.params;
     const sql = `DELETE FROM group_member WHERE grouplist_id = "${grouplist_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {
@@ -42,4 +43,5 @@ router.delete("/:grouplist_id", (req, res) => {
     });
     res.send(sql);
 });
+
 module.exports = router;

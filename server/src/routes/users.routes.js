@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const MainDB = require("../api/db");
+const MainDB = require("../api/db.js");
 
 // Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
@@ -14,6 +14,7 @@ router.get("/", (req, res) => {
         });
     });
 });
+
 router.post("/create", (req, res) => {
     const { user_id, username, first_name, last_name, pass_word, email } =
         req.body;
@@ -29,9 +30,20 @@ VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_wo
     });
     res.send(sql);
 });
+
+router.get("/groups/:user_id", (req, res) => {
+    MainDB.db.all("SELECT * FROM groups WHERE ", (err, rows) => {
+        if (err) return err;
+
+        res.json({
+            rows,
+        });
+    });
+});
+
 router.delete("/:user_id", (req, res) => {
     // write code to query
-    const {user_id} = req.params;
+    const { user_id } = req.params;
     const sql = `DELETE FROM users WHERE user_id = "${user_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {

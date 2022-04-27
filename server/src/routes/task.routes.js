@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const MainDB = require("../api/db.js");
+const { route } = require("./users.routes.js");
 
 // Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
@@ -15,10 +16,12 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:category_id", async (req, res) => {
+//create by Yijin 
+//get taskname base on the task_id
+router.get("/:task_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT * FROM task where category_id = ${req.params.category_id}`
+            `SELECT * FROM task where task_id = ${req.params.task_id}`
         );
         res.json(rows);
     } catch (e) {
@@ -26,6 +29,18 @@ router.get("/:category_id", async (req, res) => {
     }
 });
 
+router.put("/task/:task_id", async (req, res) => {
+    
+    try {
+        const rows = await MainDB.db.query(
+            `UPDATE task Set descriptions = 'hello'  where task_id = ${req.params.task_id}`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { task_id, user_id, category_id, task_name, descriptions } = req.body;
     const sql = `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions)
@@ -39,7 +54,7 @@ VALUES ("${task_id}", "${user_id}", "${category_id}", "${task_name}", "${descrip
     });
     res.send(sql);
 });
-
+// create by Yijin
 router.delete("/:task_id", (req, res) => {
     // write code to query
     const { task_id } = req.params;

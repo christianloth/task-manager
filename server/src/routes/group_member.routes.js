@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { grouplist_id, group_id, user_id } = req.body;
     const sql = `INSERT INTO group_member (grouplist_id ,group_id, user_id)
@@ -29,6 +29,7 @@ VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;
     });
     res.send(sql);
 });
+// create by Yijin
 
 router.delete("/:grouplist_id", (req, res) => {
     // write code to query

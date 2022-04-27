@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { admin_id, user_id, group_id } = req.body;
     const sql = `INSERT INTO admin (admin_id ,user_id, group_id)
@@ -30,6 +30,7 @@ VALUES ("${admin_id}","${user_id}", "${group_id}")`;
     res.send(sql);
 });
 
+// create by Yijin
 router.delete("/:admin_id", (req, res) => {
     // write code to query
     const { admin_id } = req.params;

@@ -12,7 +12,20 @@ router.get("/", (req, res) => {
         });
     });
 });
+//create by Yijin
+//list the group_id by the given user
+router.get("/:user_id", async (req, res) => {
+    try{
+        const rows = await MainDB.db.query(
+            `SELECT group_id FROM groups where user_id = ${req.params.user_id}`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { user_id, username, first_name, last_name, pass_word, email } =
         req.body;
@@ -29,16 +42,9 @@ VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_wo
     res.send(sql);
 });
 
-router.get("/groups/:user_id", (req, res) => {
-    MainDB.db.all("SELECT * FROM groups WHERE ", (err, rows) => {
-        if (err) return err;
 
-        res.json({
-            rows,
-        });
-    });
-});
 
+// create by Yijin 
 router.delete("/:user_id", (req, res) => {
     // write code to query
     const { user_id } = req.params;

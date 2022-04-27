@@ -6,20 +6,20 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 const userRouter = require("./src/routes/users.routes");
-const taskRouter = require("./src/routes/task.routes");
-const groupRouter = require("./src/routes/group.routes");
-const group_listRouter = require("./src/routes/group_member.routes");
-const eventRouter = require("./src/routes/event.routes");
-const categoryRouter = require("./src/routes/category.routes");
-const category_listRouter = require("./src/routes/category_member.routes");
-const adminRouter = require("./src/routes/admin.routes");
+// const taskRouter = require("./src/routes/task.routes");
+// const groupRouter = require("./src/routes/group.routes");
+// const group_listRouter = require("./src/routes/group_member.routes");
+// const eventRouter = require("./src/routes/event.routes");
+// const categoryRouter = require("./src/routes/category.routes");
+// const category_listRouter = require("./src/routes/category_member.routes");
+// const adminRouter = require("./src/routes/admin.routes");
 
 const MainDB = require('./src/api/db')
 const DBO = MainDB
 
-DBO.db.all('SELECT * FROM contacts', (error, rows) => {
-    console.log(error, rows)
-})
+// DBO.db.all('SELECT * FROM contacts', (error, rows) => {
+//     console.log(error, rows)
+// })
 
 // Setting CORS to allow all connection
 app.use((req, res, next) => {
@@ -40,13 +40,13 @@ app.use(
 app.use(express.json());
 
 app.use("/api/users", userRouter);
-app.use("/api/task", taskRouter);
-app.use("/api/group", groupRouter);
-app.use("/api/group_member", group_listRouter);
-app.use("/api/event", eventRouter);
-app.use("/api/category", categoryRouter);
-app.use("/api/category_member", category_listRouter);
-app.use("/api/admin", adminRouter);
+// app.use("/api/task", taskRouter);
+// app.use("/api/group", groupRouter);
+// app.use("/api/group_member", group_listRouter);
+// app.use("/api/event", eventRouter);
+// app.use("/api/category", categoryRouter);
+// app.use("/api/category_member", category_listRouter);
+// app.use("/api/admin", adminRouter);
 
 
 

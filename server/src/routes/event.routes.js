@@ -4,10 +4,10 @@ const router = express.Router();
 const MainDB = require("../api/db");
 
 // Run server and try to go to http://localhost:3001/api/
-router.get("/", (req, res) => {
-    console.log("GOT");
-    res.status(200).send("GOT");
-});
+// router.get("/", (req, res) => {
+//     console.log("GOT");
+//     res.status(200).send("GOT");
+// });
 
 router.get("/event", (req, res) => {
     // write code to query

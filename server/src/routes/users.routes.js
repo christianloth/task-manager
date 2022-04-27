@@ -39,11 +39,9 @@ function runSQL(sql){
 // var disp_promise = Q.denodeify(runSQL);
 // var get = disp_promise
 
-// Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
-    console.log("GOT");
-    res.status(200).send("GOT");
-});
+    MainDB.db.all("SELECT * FROM users", (err, rows) => {
+        if (err) return err;
 
 router.get("/:id", (req, res) => {
     id = req.params.id;
@@ -94,8 +92,10 @@ router.get("/:id", (req, res) => {
 
     // res.send(user);
 });
+
 router.post("/create", (req, res) => {
-    const { user_id, username, first_name, last_name, pass_word, email } = req.body;
+    const { user_id, username, first_name, last_name, pass_word, email } =
+        req.body;
     console.log(req.body);
     const sql = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email) VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
     MainDB.db.run(sql, (err) => {
@@ -104,6 +104,30 @@ router.post("/create", (req, res) => {
         }
         // get the last insert id
         console.log(`A row has been inserted!`);
+    });
+    res.send(sql);
+});
+
+router.get("/groups/:user_id", (req, res) => {
+    MainDB.db.all("SELECT * FROM groups WHERE ", (err, rows) => {
+        if (err) return err;
+
+        res.json({
+            rows,
+        });
+    });
+});
+
+router.delete("/:user_id", (req, res) => {
+    // write code to query
+    const { user_id } = req.params;
+    const sql = `DELETE FROM users WHERE user_id = "${user_id}"`;
+    MainDB.db.run(sql, (err) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        // get the last insert id
+        console.log(`A row has been deleted!`);
     });
     res.send(sql);
 });

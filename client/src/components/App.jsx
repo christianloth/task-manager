@@ -5,8 +5,11 @@ import { useState } from "react";
 import Login from "./Login/Login";
 
 function App() {
-    // const [token, setToken] = useState();
-    // if (!token) return <Login setToken={setToken} />;
+    const [token, setToken] = useState();
+    if (!token || token.token != "success") {
+        return <Login setToken={setToken} />;
+    }
+
 
     return (
         <Box h={"100vh"}>

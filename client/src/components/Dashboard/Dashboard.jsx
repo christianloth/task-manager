@@ -5,6 +5,8 @@ import { CategoryList } from "./CategoryList";
 import GroupList from "./GroupList";
 import { Header } from "./Header";
 
+// Get group based on index (key)
+// Created by: Reo Matsuda
 const getGroup = (groups, groupIndex) => {
     const id = parseInt(groupIndex.split("_")[0]);
     for (let i = 0; i < groups.length; ++i) {
@@ -14,6 +16,8 @@ const getGroup = (groups, groupIndex) => {
     return groups[0];
 };
 
+// Dashboard / landing page
+// Created by: Reo Matsuda
 export function Dashboard() {
     const [groups, setGroups] = useState([]);
     const [selectedGroupIndex, setSelectedGroupIndex] = useState("1_group");

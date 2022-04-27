@@ -15,6 +15,17 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/:category_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT * FROM task where category_id = ${req.params.category_id}`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 router.post("/create", (req, res) => {
     const { task_id, user_id, category_id, task_name, descriptions } = req.body;
     const sql = `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions)

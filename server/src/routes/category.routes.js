@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
-
 const MainDB = require("../api/db.js");
 
-// Run server and try to go to http://localhost:3001/api/
-
 router.get("/", (req, res) => {
-    // write code to query
     MainDB.db.all("SELECT * FROM category", (err, rows) => {
         if (err) return err;
 
@@ -15,6 +11,18 @@ router.get("/", (req, res) => {
         });
     });
 });
+
+router.get("/:group_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT * FROM category where group_id = ${req.params.group_id}`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 router.post("/create", (req, res) => {
     const { category_id, group_id, category_name, descriptions, create_date } =
         req.body;
@@ -29,6 +37,7 @@ VALUES ("${category_id}","${group_id}", "${category_name}","${descriptions}", "$
     });
     res.send(sql);
 });
+
 router.delete("/:category_id", (req, res) => {
     // write code to query
     const { category_id } = req.params;

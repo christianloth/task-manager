@@ -1,4 +1,5 @@
 // server/index.js
+// Created By: Reo Matsuda
 
 const express = require("express");
 
@@ -22,6 +23,7 @@ const MainDB = require("./src/api/db.js");
 const dbFilePath = appDir + "/src/db/test.db";
 const DBO = MainDB;
 
+// Create a new DB
 const createNewDB = () => {
     return new Promise((resolve, reject) => {
         MainDB.db = new sqlite3.Database(dbFilePath, (err) => {
@@ -44,6 +46,7 @@ const createNewDB = () => {
     });
 };
 
+// Initialize DB
 const initDB = async () => {
     await createNewDB();
     await DBO.initDB();
@@ -73,6 +76,8 @@ app.use(
 );
 app.use(express.json());
 
+// Setup routes
+// Written By: Yijin Fang
 app.use("/api/users", userRouter);
 app.use("/api/task", taskRouter);
 app.use("/api/group", groupRouter);

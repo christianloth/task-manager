@@ -1,7 +1,7 @@
 const Faker = require("@faker-js/faker");
 const faker = Faker.faker;
 const sqlite3 = require("sqlite3");
-const { dirname, resolve } = require("path");
+const { dirname } = require("path");
 const fs = require("fs");
 const appDir = dirname(require.main.filename);
 
@@ -97,6 +97,7 @@ class MainDB {
         await this.db.query("DELETE FROM task;");
         await this.db.query("DELETE FROM events;");
         await this.db.query("DELETE FROM admins;");
+
         // Store max ids to we can keep incrementing to get unique ids
         let max_group_member_list_id = 0;
         let max_category_id = 0;
@@ -120,10 +121,14 @@ class MainDB {
                 );
 
                 // Add members to each group
-                const maxMembers = Math.floor((Math.random() + 10) * 20);
+                const maxMembers = Math.floor((Math.random() + 10) * 5);
                 for (let j = 0; j < maxMembers; ++j) {
-                    const rand_id =
+                    let rand_id =
                         Math.floor(Math.random() * (MAX_USERS - 1)) + 1;
+                    while (group_users.includes(rand_id)) {
+                        rand_id =
+                            Math.floor(Math.random() * (MAX_USERS - 1)) + 1;
+                    }
                     group_users.push(rand_id);
                     await this.db.query(
                         `INSERT INTO group_member_list (group_member_list_id, user_id, group_id) values (${max_group_member_list_id++}, "${rand_id}", ${i})`
@@ -188,7 +193,7 @@ class MainDB {
                     const res = await this.db.query(
                         `INSERT INTO events (event_id, event_name, descriptions, user_id, group_id, event_date, event_location) values (${max_event_id++}, "${event_name}", "${event_descriptions}", ${user_id}, ${group_id}, "${event_date}", "${event_location}");`
                     );
-                    console.log(res);
+                    // console.log(res);
                 }
             } catch (e) {
                 console.log(e);

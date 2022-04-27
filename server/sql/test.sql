@@ -1,2 +1,3 @@
-SELECT users.first_name, users.user_id, group_member.group_id 
-FROM users INNER JOIN group_member ON group_member.user_id = users.user_id;
+SELECT users.username
+FROM users INNER JOIN group_member_list ON (group_member_list.user_id = users.user_id AND group_member_list.group_id = 96)
+ORDER BY users.user_id;

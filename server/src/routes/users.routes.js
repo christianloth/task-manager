@@ -3,9 +3,7 @@ const router = express.Router();
 
 const MainDB = require("../api/db.js");
 
-// Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
-    // write code to query
     MainDB.db.all("SELECT * FROM users", (err, rows) => {
         if (err) return err;
 

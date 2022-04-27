@@ -6,6 +6,8 @@ import {
     VStack,
 } from "@chakra-ui/react";
 
+// Each category
+// Created By: Reo Matsuda
 function Category() {
     const bg = useColorModeValue("gray.200", "blue.800");
 
@@ -23,6 +25,8 @@ function Category() {
     );
 }
 
+// Create a list of all categories within group
+// Created By: Reo Matsuda
 export function CategoryList({ group }) {
     return (
         <VStack pt={5} gap={3} flex={1} overflowY={"auto"}>

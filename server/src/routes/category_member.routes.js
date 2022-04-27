@@ -15,7 +15,7 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { categorylist_id, user_id, category_id } = req.body;
     const sql = `INSERT INTO category_member (categorylist_id ,user_id, category_id)
@@ -29,7 +29,7 @@ VALUES ("${categorylist_id}","${user_id}", "${category_id}")`;
     });
     res.send(sql);
 });
-
+// create by Yijin
 router.delete("/:categorylist_id", (req, res) => {
     // write code to query
     const { categorylist_id } = req.params;

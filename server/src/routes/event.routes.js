@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const {
         event_id,
@@ -37,7 +37,7 @@ VALUES ("${event_id}", "${event_name}", "${descriptions}", "${user_id}", "${even
     });
     res.send(sql);
 });
-
+// create by Yijin
 router.delete("/:event_id", (req, res) => {
     // write code to query
     const { event_id } = req.params;

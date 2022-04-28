@@ -1,3 +1,5 @@
+// Created by Yijin and Reo
+
 const express = require("express");
 const router = express.Router();
 const MainDB = require("../api/db.js");
@@ -22,7 +24,7 @@ router.get("/:group_id", async (req, res) => {
         res.status(400).send(e);
     }
 });
-// create by Yijin and Reo
+
 router.post("/create", (req, res) => {
     const { category_id, group_id, category_name, descriptions, create_date } =
         req.body;
@@ -37,9 +39,9 @@ VALUES ("${category_id}","${group_id}", "${category_name}","${descriptions}", "$
     });
     res.send(sql);
 });
-// create by Yijin
+
+// Created by Yijin
 router.delete("/:category_id", (req, res) => {
-    // write code to query
     const { category_id } = req.params;
     const sql = `DELETE FROM category WHERE category_id = "${category_id}"`;
     MainDB.db.run(sql, (err) => {

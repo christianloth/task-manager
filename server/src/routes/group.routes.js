@@ -14,6 +14,20 @@ router.get("/", (req, res) => {
         });
     });
 });
+//Create by Yijin
+//
+router.get("/:group_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT users.username, groups.group_name
+            FROM users INNER JOIN groups ON (groups.user_id = users.user_id 
+            AND groups.group_id = ${req.params.group_id})`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
 router.post("/create", (req, res) => {
     const { group_id, user_id, group_name, description } = req.body;

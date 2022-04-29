@@ -6,7 +6,7 @@ const router = express.Router();
 const MainDB = require("../api/db.js");
 
 router.get("/", (req, res) => {
-    MainDB.db.all("SELECT * FROM event", (err, rows) => {
+    MainDB.db.all("SELECT * FROM events", (err, rows) => {
         if (err) return err;
 
         res.json({
@@ -14,7 +14,19 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+//Create by Yijin
+//Get basic event information in the same group
+router.get("/:group_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT DISTINCT events.event_name, groups.group_name, users.username, events.event_date, events.event_location
+            FROM groups, users INNER JOIN events ON (events.user_id = users.user_id AND events.group_id = groups.group_id AND events.group_id = ${req.params.group_id})`
+          );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 router.post("/create", (req, res) => {
     const {
         event_id,

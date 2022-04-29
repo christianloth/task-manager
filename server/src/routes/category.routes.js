@@ -13,11 +13,13 @@ router.get("/", (req, res) => {
         });
     });
 });
-
+//Create By Yijin
+//get group name, category name, and username in the same group
 router.get("/:group_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT * FROM category where group_id = ${req.params.group_id}`
+            `SELECT groups.group_name, category.category_name, users.username
+            FROM groups, users INNER JOIN category ON (groups.user_id = users.user_id AND category.group_id = ${req.params.group_id})`
         );
         res.json(rows);
     } catch (e) {

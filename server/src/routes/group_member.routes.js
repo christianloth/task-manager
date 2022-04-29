@@ -6,7 +6,7 @@ const router = express.Router();
 const MainDB = require("../api/db.js");
 
 router.get("/", (req, res) => {
-    MainDB.db.all("SELECT * FROM group_member", (err, rows) => {
+    MainDB.db.all("SELECT * FROM group_member_list", (err, rows) => {
         if (err) return err;
 
         res.json({
@@ -14,11 +14,24 @@ router.get("/", (req, res) => {
         });
     });
 });
+//Create by Reo and Yijin
+//User in the same group will be list
+router.get("/:group_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT users.username
+            FROM users INNER JOIN group_member_list ON (group_member_list.user_id = users.user_id AND group_member_list.group_id = ${req.params.group_id})`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 
 router.post("/create", (req, res) => {
-    const { grouplist_id, group_id, user_id } = req.body;
-    const sql = `INSERT INTO group_member (grouplist_id ,group_id, user_id)
-VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;
+    const { group_member_list_id, group_id, user_id } = req.body;
+    const sql = `INSERT INTO group_member_list (group_member_list_id ,group_id, user_id)
+VALUES ("${group_member_list_id}","${group_id}", "${user_id}")`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);
@@ -30,9 +43,9 @@ VALUES ("${grouplist_id}","${group_id}", "${user_id}")`;
 });
 
 // Created by Yijin
-router.delete("/:grouplist_id", (req, res) => {
-    const { grouplist_id } = req.params;
-    const sql = `DELETE FROM group_member WHERE grouplist_id = "${grouplist_id}"`;
+router.delete("/:group_member_list_id", (req, res) => {
+    const { group_member_list_id } = req.params;
+    const sql = `DELETE FROM group_member_list WHERE group_member_list_id = "${group_member_list_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

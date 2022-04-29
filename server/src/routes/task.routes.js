@@ -1,12 +1,12 @@
-// Created by Yijin and Reo
-
 const express = require("express");
 const router = express.Router();
 
 const MainDB = require("../api/db.js");
 const { route } = require("./users.routes.js");
 
+// Run server and try to go to http://localhost:3001/api/
 router.get("/", (req, res) => {
+    // write code to query
     MainDB.db.all("SELECT * FROM task", (err, rows) => {
         if (err) return err;
 
@@ -16,30 +16,50 @@ router.get("/", (req, res) => {
     });
 });
 
-//create by Yijin
-//get taskname base on the task_id
+//create by Yijin 
+//get username and task name base on the task_id
 router.get("/:task_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT * FROM task where task_id = ${req.params.task_id}`
+            `SELECT users.username, task.task_name, task.complete FROM users INNER JOIN task ON (task.user_id = users.user_id AND task_id = ${req.params.task_id})`
         );
         res.json(rows);
     } catch (e) {
         res.status(400).send(e);
     }
 });
-
-router.put("/task/:task_id", async (req, res) => {
-    try {
-        const rows = await MainDB.db.query(
-            `UPDATE task Set descriptions = 'hello'  where task_id = ${req.params.task_id}`
-        );
-        res.json(rows);
-    } catch (e) {
-        res.status(400).send(e);
+//create by Yijin
+//update base on the task_id
+router.put("/:task_id", async (req, res) => {
+    const {descriptions, task_id, task_name} = req.body;
+    const origin_description = MainDB.db.run(`SELECT descriptions FROM task where task_id = ${task_id}`);
+    const origin_name = MainDB.db.run(`SELECT task_name FROM task where task_id = ${task_id}`);
+    console.log(origin_name);
+    if(descriptions === origin_description){
+        const sql = `UPDATE task Set task_name = '${task_name}' where task_id = ${task_id}`;
+        MainDB.db.run(sql, (err) => {
+            if (err) {
+                return console.log(err.message);
+            }
+            // get the last insert id
+            console.log(`task name for task ${task_id} has been update!`);
+        });
+        res.send(sql);
+    }
+    if(task_name === origin_name){
+        const sql = `UPDATE task Set descriptions = '${descriptions}' where task_id = ${task_id}`;
+        MainDB.db.run(sql, (err) => {
+            if (err) {
+                return console.log(err.message);
+            }
+            // get the last insert id
+            console.log(`description for task ${task_id} has been update!`);
+        });
+        res.send(sql);
     }
 });
 
+// create by Yijin and Reo
 router.post("/create", (req, res) => {
     const { task_id, user_id, category_id, task_name, descriptions } = req.body;
     const sql = `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions)
@@ -53,8 +73,7 @@ VALUES ("${task_id}", "${user_id}", "${category_id}", "${task_name}", "${descrip
     });
     res.send(sql);
 });
-
-// Created by Yijin
+// create by Yijin
 router.delete("/:task_id", (req, res) => {
     // write code to query
     const { task_id } = req.params;
@@ -68,5 +87,4 @@ router.delete("/:task_id", (req, res) => {
     });
     res.send(sql);
 });
-
 module.exports = router;

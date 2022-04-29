@@ -43,9 +43,9 @@ VALUES ("${group_member_list_id}","${group_id}", "${user_id}")`;
 });
 
 // Created by Yijin
-router.delete("/:group_member_list_id", (req, res) => {
-    const { group_member_list_id } = req.params;
-    const sql = `DELETE FROM group_member_list WHERE group_member_list_id = "${group_member_list_id}"`;
+router.delete("/:user_id", (req, res) => {
+    const { user_id } = req.params;
+    const sql = `DELETE FROM group_member_list WHERE user_id = "${user_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

@@ -43,10 +43,10 @@ VALUES ("${categorylist_id}","${user_id}", "${category_id}")`;
 });
 
 // Created by Yijin
-router.delete("/:categorylist_id", (req, res) => {
+router.delete("/:user_id", (req, res) => {
     // write code to query
-    const { categorylist_id } = req.params;
-    const sql = `DELETE FROM category_member WHERE categorylist_id = "${categorylist_id}"`;
+    const { user_id } = req.params;
+    const sql = `DELETE FROM category_member WHERE user_id = "${user_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);

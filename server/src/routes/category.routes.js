@@ -27,6 +27,20 @@ router.get("/:group_id", async (req, res) => {
     }
 });
 
+//Created by Yijin
+//update category name and description
+router.put("/:category_id", async (req, res) => {
+    const {descriptions, category_name, category_id} = req.body;
+    const sql = `UPDATE category Set category_name = '${category_name}',descriptions = '${descriptions}'  where category_id = ${category_id}`;
+    MainDB.db.run(sql, (err) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        // get the last insert id
+        console.log(`category name and description for category ${category_id} has been update!`);
+    });
+    res.send(sql);
+});
 router.post("/create", (req, res) => {
     const { category_id, group_id, category_name, descriptions, create_date } =
         req.body;

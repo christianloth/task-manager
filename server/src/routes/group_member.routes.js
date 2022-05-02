@@ -19,8 +19,8 @@ router.get("/", (req, res) => {
 router.get("/:group_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT users.username
-            FROM users INNER JOIN group_member_list ON (group_member_list.user_id = users.user_id AND group_member_list.group_id = ${req.params.group_id})`
+            `SELECT users.username, groups.group_name
+            FROM users, groups INNER JOIN group_member_list ON (group_member_list.user_id = users.user_id AND group_member_list.group_id = ${req.params.group_id})`
         );
         res.json(rows);
     } catch (e) {

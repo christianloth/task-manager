@@ -14,12 +14,13 @@ router.get("/", (req, res) => {
     });
 });
 //Create By Yijin
-//get group name, category name, and username in the same group
-router.get("/:group_id", async (req, res) => {
+//get group name, category name, task name and username base on category id
+router.get("/:category_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT groups.group_name, category.category_name, users.username
-            FROM groups, users INNER JOIN category ON (groups.user_id = users.user_id AND category.group_id = ${req.params.group_id})`
+            `SELECT groups.group_name, category.category_name, users.username, task.task_name
+            FROM groups, users, task INNER JOIN category ON 
+            (task.category_id = ${req.params.category_id} AND category.group_id = groups.group_id AND groups.user_id = users.user_id)`
         );
         res.json(rows);
     } catch (e) {
@@ -36,7 +37,6 @@ router.put("/:category_id", async (req, res) => {
         if (err) {
             return console.log(err.message);
         }
-        // get the last insert id
         console.log(`category name and description for category ${category_id} has been update!`);
     });
     res.send(sql);

@@ -17,11 +17,13 @@ router.get("/", (req, res) => {
 });
 
 //create by Yijin 
-//get username and task name base on the task_id
+//get username, group name category name and task name base on the task_id
 router.get("/:task_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT users.username, task.task_name, descriptions, task.complete FROM users INNER JOIN task ON (task.user_id = users.user_id AND task_id = ${req.params.task_id})`
+            `SELECT users.username, groups.group_name, category.category_name, task.task_name, task.descriptions, task.complete
+            FROM users, category, groups INNER JOIN task ON 
+            (users.user_id = task.user_id AND task.category_id = category.category_id AND task.task_id = ${req.params.task_id} AND groups.group_id = category.group_id)`
         );
         res.json(rows);
     } catch (e) {
@@ -37,7 +39,6 @@ router.put("/:task_id", async (req, res) => {
         if (err) {
             return console.log(err.message);
         }
-        // get the last insert id
         console.log(`task name and description for task ${task_id} has been update!`);
     });
     res.send(sql);

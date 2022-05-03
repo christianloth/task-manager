@@ -37,7 +37,6 @@ router.put("/:event_id", async (req, res) => {
         if (err) {
             return console.log(err.message);
         }
-        // get the last insert id
         console.log(`event information for ${event_name} has been update!`);
     });
     res.send(sql);

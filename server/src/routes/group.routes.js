@@ -15,13 +15,13 @@ router.get("/", (req, res) => {
     });
 });
 //Create by Yijin
-//get username and groupname base on the group_id
+//get usernamae group_name category_name and event_name base on the group_id
 router.get("/:group_id", async (req, res) => {
     try {
         const rows = await MainDB.db.query(
-            `SELECT users.username, groups.group_name, groups.icon, groups.descriptions
-            FROM users INNER JOIN groups ON (groups.user_id = users.user_id 
-            AND groups.group_id = ${req.params.group_id})`
+            `SELECT users.username, groups.group_name, groups.descriptions, category.category_name, events.event_name 
+            FROM users, events, category INNER JOIN groups ON (groups.user_id = users.user_id 
+            AND events.group_id = ${req.params.group_id} AND category.group_id = ${req.params.group_id}) `
         );
         res.json(rows);
     } catch (e) {
@@ -38,7 +38,6 @@ router.put("/:group_id", async (req, res) => {
         if (err) {
             return console.log(err.message);
         }
-        // get the last insert id
         console.log(`group name and description for group ${group_id} has been update!`);
     });
     res.send(sql);

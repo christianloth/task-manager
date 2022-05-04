@@ -1,12 +1,11 @@
+// Created by Yijin and Reo
+
 const express = require("express");
 const router = express.Router();
 
 const MainDB = require("../api/db.js");
 
-// Run server and try to go to http://localhost:3001/api/
-
 router.get("/", (req, res) => {
-    // write code to query
     MainDB.db.all("SELECT * FROM category_member", (err, rows) => {
         if (err) return err;
 
@@ -16,6 +15,19 @@ router.get("/", (req, res) => {
     });
 });
 
+//Create by Yijin 
+//Get username base on the category_id
+router.get("/:category_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT users.username
+            FROM users INNER JOIN category_member ON (category_member.user_id = users.user_id AND category_member.category_id = ${req.params.category_id})`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
 router.post("/create", (req, res) => {
     const { categorylist_id, user_id, category_id } = req.body;
     const sql = `INSERT INTO category_member (categorylist_id ,user_id, category_id)
@@ -30,10 +42,11 @@ VALUES ("${categorylist_id}","${user_id}", "${category_id}")`;
     res.send(sql);
 });
 
-router.delete("/:categorylist_id", (req, res) => {
+// Created by Yijin
+router.delete("/:user_id", (req, res) => {
     // write code to query
-    const { categorylist_id } = req.params;
-    const sql = `DELETE FROM category_member WHERE categorylist_id = "${categorylist_id}"`;
+    const { user_id } = req.params;
+    const sql = `DELETE FROM category_member WHERE user_id = "${user_id}"`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);
@@ -43,4 +56,5 @@ router.delete("/:categorylist_id", (req, res) => {
     });
     res.send(sql);
 });
+
 module.exports = router;

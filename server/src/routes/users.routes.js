@@ -1,3 +1,5 @@
+// Created by Yijin and Reo
+
 const express = require("express");
 const router = express.Router();
 
@@ -103,6 +105,19 @@ router.get("/:userId", async (req, res) => {
         })
     }else{
         res.status(400).send("Insufficient permissions to access this page");
+    }
+});
+
+// Created by Yijin
+// List the group_id by the given user
+router.get("/:user_id", async (req, res) => {
+    try {
+        const rows = await MainDB.db.query(
+            `SELECT group_id FROM groups where user_id = ${req.params.user_id}`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
     }
 });
 

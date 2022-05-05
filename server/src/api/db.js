@@ -83,7 +83,7 @@ class MainDB {
             const email = faker.internet.email(first_name, last_name);
             try {
                 await this.db.query(
-                    `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email) values (${i}, "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`
+                    `INSERT INTO users (user_id,username,first_name,last_name,pass_word,email) values (${i}, "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`
                 );
             } catch (e) {
                 console.log(e);
@@ -117,7 +117,7 @@ class MainDB {
 
             try {
                 await this.db.query(
-                    `INSERT INTO groups (group_id, user_id, group_name, descriptions, icon) values (${i}, "${user_id}", "${group_name}", "${descriptions}", "${icon}")`
+                    `INSERT INTO groups (group_id,user_id,group_name,descriptions,icon) values (${i}, "${user_id}", "${group_name}", "${descriptions}", "${icon}")`
                 );
 
                 // Add members to each group
@@ -131,18 +131,18 @@ class MainDB {
                     }
                     group_users.push(rand_id);
                     await this.db.query(
-                        `INSERT INTO group_member_list (group_member_list_id, user_id, group_id) values (${max_group_member_list_id++}, "${rand_id}", ${i})`
+                        `INSERT INTO group_member_list (group_member_list_id,user_id,group_id) values (${max_group_member_list_id++}, "${rand_id}", ${i})`
                     );
                 }
 
                 // Set admin to first 2 members
                 await this.db.query(
-                    `INSERT INTO admins (admin_id, user_id, group_id) values (${max_admin_id++}, "${
+                    `INSERT INTO admins (admin_id,user_id,group_id) values (${max_admin_id++}, "${
                         group_users[0]
                     }", ${i})`
                 );
                 await this.db.query(
-                    `INSERT INTO admins (admin_id, user_id, group_id) values (${max_admin_id++}, "${
+                    `INSERT INTO admins (admin_id,user_id,group_id) values (${max_admin_id++}, "${
                         group_users[1]
                     }", ${i})`
                 );
@@ -155,7 +155,7 @@ class MainDB {
                     );
                     const category_description = faker.random.words(30);
                     await this.db.query(
-                        `INSERT INTO category (category_id, group_id, category_name, descriptions, create_date) values (${max_category_id++}, ${i}, "${category_name}", "${category_description}", "${new Date().toISOString()}")`
+                        `INSERT INTO category (category_id,group_id,category_name,descriptions,create_date) values (${max_category_id++}, ${i}, "${category_name}", "${category_description}", "${new Date().toISOString()}")`
                     );
 
                     // Create tasks for each category
@@ -170,7 +170,7 @@ class MainDB {
                         const task_description = faker.random.words(30);
 
                         await this.db.query(
-                            `INSERT INTO task (task_id, user_id, category_id, task_name, descriptions, complete) values (${max_task_id++}, ${user_id}, ${
+                            `INSERT INTO task (task_id,user_id,category_id,task_name,descriptions,complete) values (${max_task_id++}, ${user_id}, ${
                                 max_category_id - 1
                             }, "${task_name}", "${task_description}", 0);`
                         );
@@ -191,7 +191,7 @@ class MainDB {
                     const event_date = new Date().toISOString();
                     const event_location = faker.address.streetAddress(true);
                     const res = await this.db.query(
-                        `INSERT INTO events (event_id, event_name, descriptions, user_id, group_id, event_date, event_location) values (${max_event_id++}, "${event_name}", "${event_descriptions}", ${user_id}, ${group_id}, "${event_date}", "${event_location}");`
+                        `INSERT INTO events (event_id,event_name,descriptions,user_id,group_id,event_date,event_location) values (${max_event_id++}, "${event_name}", "${event_descriptions}", ${user_id}, ${group_id}, "${event_date}", "${event_location}");`
                     );
                     // console.log(res);
                 }

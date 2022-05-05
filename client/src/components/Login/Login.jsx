@@ -31,30 +31,23 @@ export default function Login({ setToken }) {
 
     return (
         <div className="login-wrapper">
-            <h1>Task Manager Login</h1>
+            <h1>Please Log In</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     <p>Username</p>
-                    <div className="login-text">
-                        <input
-                            type="text"
-                            onChange={(e) => setUserName(e.target.value)}
-                        />
-                    </div>
+                    <input
+                        type="text"
+                        onChange={(e) => setUserName(e.target.value)}
+                    />
                 </label>
                 <label>
                     <p>Password</p>
-                    <div className="login-text" >
-                        <input
-                            type="password"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-
-                    </div>
-
-
+                    <input
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                 </label>
-                <div className="button">
+                <div>
                     <button type="submit">Submit</button>
                 </div>
             </form>

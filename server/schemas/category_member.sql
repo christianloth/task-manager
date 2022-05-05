@@ -1,4 +1,4 @@
-CREATE TABLE category_member (
+CREATE TABLE category_member(
     categorylist_id INTEGER PRIMARY KEY,
     user_id INTEGER,
     category_id INTEGER,

@@ -1,4 +1,4 @@
-CREATE TABLE group_member_list (
+CREATE TABLE group_member_list(
     group_member_list_id INTEGER PRIMARY KEY,
     user_id INTEGER,
     group_id INTEGER,

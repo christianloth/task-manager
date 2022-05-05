@@ -44,3 +44,14 @@ router.delete("/:admin_id", (req, res) => {
 });
 
 module.exports = router;
+
+// router.post("/login", (req,res) => {
+//     username = req.username
+//     password = req.password
+
+//     //check database if exist
+
+//     //update session
+
+//     //retiurn token redirect to User Dashboard ("/:id")
+// })

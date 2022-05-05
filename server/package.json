@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "q": "^1.5.1",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {

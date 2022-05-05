@@ -5,27 +5,6 @@ const router = express.Router();
 
 const MainDB = require("../api/db");
 
-/*
-
-POST “/signup” (username, password, firsname, lastname, email) ⇒ 
-Assert username not in database 
-Assert email not in database
-Hash password
-Insert new user into database
-Return User ID
-PUT “/:id” (username, password, firsname, lastname, email) ⇒ 
-Is user “id” signed in?
-Assert “username” not in database 
-Assert “email" not in database
-Update Database Based on Request Params
-Return is_successful?
-DELETE “/:id/delete” ⇒ 
-Is user “id” signed in?
-Delete User From Database
-Return is_successful?
-
-*/
-
 //Generic Function to Run SQL commands, get all or first values, and print errors
 async function runSQL(_query,_first){
     try {
@@ -108,33 +87,18 @@ router.get("/:userId", async (req, res) => {
     }
 });
 
-// Created by Yijin
-// List the group_id by the given user
-router.get("/:user_id", async (req, res) => {
-    try {
-        const rows = await MainDB.db.query(
-            `SELECT group_id FROM groups where user_id = ${req.params.user_id}`
-        );
-        res.json(rows);
-    } catch (e) {
-        res.status(400).send(e);
-    }
-});
-
 router.post("/create", (req, res) => {
     const { user_id, username, first_name, last_name, pass_word, email } = req.body;
     const query = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email) VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
     try{answer = runSQL(query).then(data => {
-        console.log(`A row has been inserted!`);
-        res.json(data[1]);
+        console.log(`User ${username} with UserID ${user_id} has been created!`);
+        res.json(data);
     })}
     catch{
         res.status(400).send("Unable to Create User");
     }
 });
 
-
-//get user setting
 
 router.put("/:userId/settings", async (req, res) => {
     if(hasAccess(req.session,req.params.userId)){

@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const userRouter = require("./src/routes/users.routes");
 // const taskRouter = require("./src/routes/task.routes");
-// const groupRouter = require("./src/routes/group.routes");
+const groupRouter = require("./src/routes/group.routes");
 // const group_listRouter = require("./src/routes/group_member.routes");
 // const eventRouter = require("./src/routes/event.routes");
 // const categoryRouter = require("./src/routes/category.routes");
@@ -80,7 +80,7 @@ app.use(express.urlencoded({ extended: true }));
 // Written By: Yijin Fang, Quentin Romanoski
 app.use("/api/users", userRouter);
 // app.use("/api/task", taskRouter);
-// app.use("/api/group", groupRouter);
+app.use("/api/group", groupRouter);
 // app.use("/api/group_member", group_listRouter);
 // app.use("/api/event", eventRouter);
 // app.use("/api/category", categoryRouter);

@@ -6,7 +6,9 @@ import Login from "./Login/Login";
 
 function App() {
     const [token, setToken] = useState();
-    if (!token || token.token != "success") {
+    if (sessionStorage.getItem("user"))
+        console.log("App:", sessionStorage.getItem("user"));
+    if (!token || token.token !== "success") {
         return <Login setToken={setToken} />;
     }
 

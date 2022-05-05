@@ -1,4 +1,3 @@
-// server/index.js
 // Created By: Reo Matsuda
 
 const express = require("express");
@@ -61,7 +60,7 @@ const initDB = async () => {
 // Setting CORS to allow all connection
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
     res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept"
@@ -86,6 +85,7 @@ app.use("/api/event", eventRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/category_member", category_listRouter);
 app.use("/api/admin", adminRouter);
+// =======================
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

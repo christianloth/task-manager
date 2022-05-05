@@ -15,6 +15,22 @@ router.get("/", (req, res) => {
     });
 });
 
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        if (!username || !password) {
+            res.status(401).send("Must have username and password!");
+            return;
+        }
+        const rows = await MainDB.db.query(
+            `SELECT * FROM users WHERE username = "${username}" AND pass_word = "${password}"`
+        );
+        res.json(rows);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 // Created by Yijin
 // List the group_id by the given user
 router.get("/:user_id", async (req, res) => {

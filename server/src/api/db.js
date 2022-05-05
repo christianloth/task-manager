@@ -1,3 +1,5 @@
+// Written By: Reo Matsuda
+
 const Faker = require("@faker-js/faker");
 const faker = Faker.faker;
 const sqlite3 = require("sqlite3");

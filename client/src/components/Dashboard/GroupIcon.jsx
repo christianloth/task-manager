@@ -1,7 +1,10 @@
+// GroupIcon.jsx
+// Created By: Reo Matsuda
+
 import { PhoneIcon, Icon } from "@chakra-ui/icons";
 import { Avatar, useColorModeValue } from "@chakra-ui/react";
 import { HiUserGroup } from "react-icons/hi";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 function getIcon(icon) {
     switch (icon) {
@@ -13,25 +16,19 @@ function getIcon(icon) {
 }
 
 function GroupIcon({ icon, bg, color }) {
-    return (
-        <Avatar
-            bg={bg}
-            color={color}
-            icon={getIcon(icon)}
-        />
-    );
+    return <Avatar bg={bg} color={color} icon={getIcon(icon)} />;
 }
 
 GroupIcon.propTypes = {
     icon: PropTypes.string,
     bg: PropTypes.string,
     color: PropTypes.string,
-}
+};
 
 GroupIcon.defaultProps = {
     icon: "",
     bg: "transparent",
-    color: 'white',
-}
+    color: "white",
+};
 
 export default GroupIcon;

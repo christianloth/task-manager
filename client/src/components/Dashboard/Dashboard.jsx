@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { useMemo } from "react";
 import { useState } from "react";
 import { CategoryList } from "./CategoryList";
 import GroupList from "./GroupList";
@@ -20,7 +21,10 @@ const getGroup = (groups, groupIndex) => {
 // Created by: Reo Matsuda
 export function Dashboard() {
     const [groups, setGroups] = useState([]);
-    const [selectedGroupIndex, setSelectedGroupIndex] = useState("1_group");
+    const [selectedGroupIndex, setSelectedGroupIndex] = useState("0_group");
+    const [selectedGroup, setSelectedGroup] = useState(null);
+
+    const selectedID = parseInt(selectedGroupIndex.split("_")[0]);
 
     useEffect(async () => {
         let data = await fetch("http://localhost:3001/api/group");
@@ -29,12 +33,18 @@ export function Dashboard() {
         setSelectedGroupIndex(rows[0].group_id + "_group");
     }, []);
 
-    let selectedGroup = getGroup(groups, selectedGroupIndex);
-    let group_id, user_id, group_name, description;
-    if (selectedGroup)
-        ({ group_id, user_id, group_name, description } = { ...selectedGroup });
-    else group_name = "TEST";
-    console.log(group_name);
+    useEffect(async () => {
+        let data = await fetch(`http://localhost:3001/api/group/${selectedID}`);
+        console.log(data);
+        const res = await data.json();
+        console.log(res);
+        setSelectedGroup(res);
+        return () => {};
+    }, [selectedGroupIndex]);
+
+    if (!selectedGroup) return <></>;
+
+    const { info, admins, members, events, categories } = selectedGroup;
 
     return (
         <Flex h={"100%"} p={6} justifyContent="center" alignItems={"center"}>
@@ -45,8 +55,15 @@ export function Dashboard() {
                 ></GroupList>
             )}
             <Flex flexDirection={"column"} flex={1} h={"100%"}>
-                <Header icon="" name={group_name} memberCount={0}></Header>
-                <CategoryList group={[]}></CategoryList>
+                <Header
+                    icon=""
+                    name={info.group_name}
+                    memberCount={members.length}
+                    admins={admins}
+                    events={events}
+                    categories={categories}
+                />
+                <CategoryList group_id={selectedID} categories={categories} />
             </Flex>
         </Flex>
     );

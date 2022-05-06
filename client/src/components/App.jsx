@@ -5,13 +5,19 @@ import { useState } from "react";
 import Login from "./Login/Login";
 
 function App() {
-    // const [token, setToken] = useState();
-    // if (!token) return <Login setToken={setToken} />;
+    const [token, setToken] = useState();
+    if (!token) return <Login setToken={setToken} />;
+    const { user_id } = token;
+    console.log(user_id);
 
     return (
         <Box h={"100vh"}>
             <Routes>
-                <Route exact path="/" element={<Dashboard />} />
+                <Route
+                    exact
+                    path="/"
+                    element={<Dashboard user_id={user_id} />}
+                />
             </Routes>
         </Box>
     );

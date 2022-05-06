@@ -88,22 +88,26 @@ app.use("/api/category", categoryRouter);
 app.use("/api/category_member", category_listRouter);
 app.use("/api/admin", adminRouter);
 
-// Login: Authentication and Setting Session 
+// Login: Authentication and Setting Session
 // Written by: Quentin
-app.post('/api/login', (req, res) => {
-	try{
+app.post("/api/login", (req, res) => {
+    try {
         let username = req.body.username;
         let password = req.body.password;
         if (username && password) {
             query = `SELECT user_id FROM users where username="${username}" AND pass_word="${password}"`;
             answer = MainDB.db.query(query).then((data) => {
                 if (data) {
-                    user_id = data["rows"][0]["user_id"];
-                    // Authenticate the user
-                    req.session.loggedin = true;
-                    req.session.userId = user_id;
-                    // Redirect to home page
-                    res.send(`Successfully Logged In as ${username}`);
+                    try {
+                        user_id = data["rows"][0]["user_id"];
+                        // Authenticate the user
+                        req.session.loggedin = true;
+                        req.session.userId = user_id;
+                        // Redirect to home page
+                        res.json({ username, password, user_id });
+                    } catch (e) {
+                        res.send(e);
+                    }
                 } else {
                     res.send("Incorrect Username and/or Password!");
                 }

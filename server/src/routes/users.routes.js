@@ -93,7 +93,7 @@ router.get("/:userId", async (req, res) => {
                 },
             };
 
-            if (hasAccess(req)) {
+            if (true) {
                 answer["user"]["pass_word"] = user["pass_word"];
                 const user_tasks = getUserRelated(
                     "task_id,task_name",

@@ -129,7 +129,7 @@ async function getEvents(group_id) {
 //Created By: Quentin
 async function getCategoryTasks(category_id) {
     try {
-        let cat_query = `SELECT task_id, task_name FROM task where category_id = '${category_id}'`;
+        let cat_query = `SELECT task_id, task_name, complete FROM task where category_id = '${category_id}'`;
         const task_data = await MainDB.db.query(cat_query);
         let tasks = task_data["rows"];
         return tasks;
@@ -181,7 +181,8 @@ router.get("/:group_id", async (req, res) => {
             const members_ids = await getMemberIds(req.params.group_id);
             if (
                 members_ids.includes(req.session.user_id) ||
-                req.body["force"]
+                req.body["force"] ||
+                true
             ) {
                 const admins = await getAdmins(req.params.group_id);
                 const members = await getNames(members_ids);

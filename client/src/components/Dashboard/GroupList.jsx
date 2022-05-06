@@ -1,3 +1,6 @@
+// GroupList.jsx
+// Created By: Reo Matsuda
+
 import { AddIcon } from "@chakra-ui/icons";
 import {
     Avatar,

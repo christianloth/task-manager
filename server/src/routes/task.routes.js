@@ -74,4 +74,21 @@ router.delete("/:task_id", (req, res) => {
     });
     res.send(sql);
 });
+
+// Set complete for task
+// Written By: Reo Matsuda
+router.post("/set/:task_id", async (req, res) => {
+    const { task_id } = req.params;
+    const { complete } = req.body;
+    const sql = `UPDATE task SET complete = ${complete} WHERE task_id = ${task_id};`;
+    MainDB.db.run(sql, (err) => {
+        if (err) {
+            return console.log(err.message);
+        }
+        console.log(
+            `task name and description for task ${task_id} has been updated with complete = ${complete}!`
+        );
+    });
+    res.send(sql);
+});
 module.exports = router;

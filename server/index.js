@@ -9,13 +9,13 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 const userRouter = require("./src/routes/users.routes");
-// const taskRouter = require("./src/routes/task.routes");
+const taskRouter = require("./src/routes/task.routes");
 const groupRouter = require("./src/routes/group.routes");
-// const group_listRouter = require("./src/routes/group_member.routes");
-// const eventRouter = require("./src/routes/event.routes");
-// const categoryRouter = require("./src/routes/category.routes");
-// const category_listRouter = require("./src/routes/category_member.routes");
-// const adminRouter = require("./src/routes/admin.routes");
+const group_listRouter = require("./src/routes/group_member.routes");
+const eventRouter = require("./src/routes/event.routes");
+const categoryRouter = require("./src/routes/category.routes");
+const category_listRouter = require("./src/routes/category_member.routes");
+const adminRouter = require("./src/routes/admin.routes");
 
 const { dirname } = require("path");
 const appDir = dirname(require.main.filename);
@@ -40,7 +40,6 @@ const createNewDB = () => {
                         });
                     });
                 };
-
                 resolve("Connected to database");
             }
         });
@@ -81,17 +80,18 @@ app.use(express.urlencoded({ extended: true }));
 // Setup routes
 // Written By: Yijin Fang, Quentin Romanoski
 app.use("/api/users", userRouter);
-// app.use("/api/task", taskRouter);
+app.use("/api/task", taskRouter);
 app.use("/api/group", groupRouter);
-// app.use("/api/group_member", group_listRouter);
-// app.use("/api/event", eventRouter);
-// app.use("/api/category", categoryRouter);
-// app.use("/api/category_member", category_listRouter);
-// app.use("/api/admin", adminRouter);
+app.use("/api/group_member", group_listRouter);
+app.use("/api/event", eventRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/category_member", category_listRouter);
+app.use("/api/admin", adminRouter);
 
-//Login: Authentication and Setting Session (Written by: Quentin Romanoski)
-app.post("/api/login", (req, res) => {
-    try {
+// Login: Authentication and Setting Session 
+// Written by: Quentin
+app.post('/api/login', (req, res) => {
+	try{
         let username = req.body.username;
         let password = req.body.password;
         if (username && password) {

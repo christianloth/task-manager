@@ -5,28 +5,26 @@ const router = express.Router();
 
 const MainDB = require("../api/db.js");
 
-//POST Create Group 
-    //Is a user signed in
-        //Check Owner Exists As a User
-            //Create Group Instance
-            //Create Admin Instance from Owner
-            //Create Member Instance from Owner
-            //Create Member Instance from Current User
+//POST Create Group
+//Is a user signed in
+//Check Owner Exists As a User
+//Create Group Instance
+//Create Admin Instance from Owner
+//Create Member Instance from Owner
+//Create Member Instance from Current User
 
 //PUT Update Group
-    //getGroupAdmins()
-    //Is current user have Admin privileges
-        //Check and Update Relavent Information
-        //If "owner" change 
-            //Check and If Necessary create new Admin and Member instance
+//getGroupAdmins()
+//Is current user have Admin privileges
+//Check and Update Relavent Information
+//If "owner" change
+//Check and If Necessary create new Admin and Member instance
 
 //DELETE Group
-    //Is Current User the Owner of Group
-        //Delete All Admins
-        //Delete All Members
-        //Delete Group
-
-
+//Is Current User the Owner of Group
+//Delete All Admins
+//Delete All Members
+//Delete Group
 
 router.get("/", (req, res) => {
     MainDB.db.all("SELECT * FROM groups", (err, rows) => {
@@ -38,18 +36,12 @@ router.get("/", (req, res) => {
     });
 });
 
-
-
 //Created by Quentin
 //update group name and description
-router.put("/:group_id", async (req, res) => {
-    
-});
+router.put("/:group_id", async (req, res) => {});
 
 // Created by Quentin
-router.delete("/:group_id", (req, res) => {
-    
-});
+router.delete("/:group_id", (req, res) => {});
 
 module.exports = router;
 
@@ -57,7 +49,7 @@ module.exports = router;
 // async function runSQL(_query,_first){
 //     try {
 //         const rows = await MainDB.db.query(_query);
-//         if(rows["rows"]){ 
+//         if(rows["rows"]){
 //             // console.log(rows["rows"])
 //             if(_first){
 //                 return new Promise(resolve => resolve(rows["rows"][0]))
@@ -111,7 +103,7 @@ module.exports = router;
 //         answer = runSQL(query,true).then(async user => {
 //             if(user){
 //                 console.log(`Selected User ${user["username"]} (UserID: ${user["user_id"]}) from database!`);
-                
+
 //                 const user_tasks = getUserRelated(req.params.userId, "task_id,task_name","task");
 //                 const user_events = getUserRelated(req.params.userId,"event_id,event_name","events");
 //                 const user_groups = getUserRelated(req.params.userId, "group_id", "group_member_list");
@@ -160,7 +152,6 @@ module.exports = router;
 //     }
 // });
 
-
 // //get user setting
 
 // router.put("/:userId/settings", async (req, res) => {
@@ -205,8 +196,6 @@ module.exports = router;
 //         res.status(400).send("Insufficient permissions to access this page");
 //     }
 // });
-
-
 
 // router.delete("/:userId", (req, res) => {
 //     if(hasAccess(req.session,req.params.userId)){

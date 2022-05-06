@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
     });
 });
 
-//create by Yijin 
+//create by Yijin
 //get username, group name category name and task name base on the task_id
 router.get("/:task_id", async (req, res) => {
     try {
@@ -33,13 +33,15 @@ router.get("/:task_id", async (req, res) => {
 //create by Yijin
 //update base on the task_id
 router.put("/:task_id", async (req, res) => {
-    const {descriptions, task_id, task_name} = req.body;
+    const { descriptions, task_id, task_name } = req.body;
     const sql = `UPDATE task Set task_name = '${task_name}',descriptions = '${descriptions}'  where task_id = ${task_id}`;
     MainDB.db.run(sql, (err) => {
         if (err) {
             return console.log(err.message);
         }
-        console.log(`task name and description for task ${task_id} has been update!`);
+        console.log(
+            `task name and description for task ${task_id} has been update!`
+        );
     });
     res.send(sql);
 });

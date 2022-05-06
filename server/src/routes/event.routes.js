@@ -21,7 +21,7 @@ router.get("/:event_id", async (req, res) => {
         const rows = await MainDB.db.query(
             `SELECT DISTINCT events.event_name, groups.group_name, users.username, events.event_date, events.event_location, events.descriptions
             FROM groups, users INNER JOIN events ON (events.user_id = users.user_id AND events.group_id = groups.group_id AND events.event_id = ${req.params.event_id})`
-          );
+        );
         res.json(rows);
     } catch (e) {
         res.status(400).send(e);
@@ -30,7 +30,8 @@ router.get("/:event_id", async (req, res) => {
 //Created by Yijin
 //update event information
 router.put("/:event_id", async (req, res) => {
-    const {descriptions, event_name, event_id, event_date, event_location} = req.body;
+    const { descriptions, event_name, event_id, event_date, event_location } =
+        req.body;
     const sql = `UPDATE events Set event_name = '${event_name}',event_date = '${event_date}'
     ,event_location = '${event_location}', descriptions = '${descriptions}'  where event_id = ${event_id}`;
     MainDB.db.run(sql, (err) => {

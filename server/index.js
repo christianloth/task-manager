@@ -3,7 +3,7 @@
 
 const express = require("express");
 const sqlite3 = require("sqlite3");
-const session = require('express-session');
+const session = require("express-session");
 
 const PORT = process.env.PORT || 3001;
 
@@ -67,11 +67,13 @@ app.use((req, res, next) => {
 });
 
 //Session Used to Store Loggin Information (Written By: Quentin Romanoski)
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true
-}));
+app.use(
+    session({
+        secret: "secret",
+        resave: true,
+        saveUninitialized: true,
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -93,23 +95,23 @@ app.post('/api/login', (req, res) => {
         let username = req.body.username;
         let password = req.body.password;
         if (username && password) {
-            query = `SELECT user_id FROM users where username="${username}" AND pass_word="${password}"`
-            answer =  MainDB.db.query(query).then(data => {
-                if(data){
+            query = `SELECT user_id FROM users where username="${username}" AND pass_word="${password}"`;
+            answer = MainDB.db.query(query).then((data) => {
+                if (data) {
                     user_id = data["rows"][0]["user_id"];
                     // Authenticate the user
                     req.session.loggedin = true;
                     req.session.userId = user_id;
                     // Redirect to home page
                     res.send(`Successfully Logged In as ${username}`);
-                }else{
-                    res.send('Incorrect Username and/or Password!');
+                } else {
+                    res.send("Incorrect Username and/or Password!");
                 }
             });
         } else {
-            res.send('Please enter Username and Password!');
+            res.send("Please enter Username and Password!");
         }
-    }catch (e) {
+    } catch (e) {
         console.log(`Failed to Login \nError: ${e}`);
         res.status(400).send("Unable to Login");
     }

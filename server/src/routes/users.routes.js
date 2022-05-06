@@ -1,160 +1,196 @@
-// Created by Yijin and Reo
+// Created by Yijin, Reo, and Quentin
 
 const express = require("express");
 const router = express.Router();
 
 const MainDB = require("../api/db");
 
-//Generic Function to Run SQL commands, get all or first values, and print errors
-async function runSQL(_query,_first){
-    try {
-        const rows = await MainDB.db.query(_query);
-        if(rows["rows"]){ 
-            // console.log(rows["rows"])
-            if(_first){
-                return new Promise(resolve => resolve(rows["rows"][0]))
-            }else{
-                return new Promise(resolve => resolve(rows["rows"]))
-            }
-        }else{
-            return new Promise(resolve => resolve())
-        }
-    } catch (e) {
-        return new Promise((resolve, reject) => reject(e))
-    }
-}
-
-//Get "Related" information about a user (his tasks,events,categories,and groups)
-function getUserRelated(_userId, _idName, _attribute){
-    query = `SELECT ${_idName} FROM ${_attribute} where user_id=${_userId}`
-    return runSQL(query,false);
-}
-
-//Get Names of Categories/Groups based on an ID array
-async function getNamesFromIds(id_arr,_table,_id,_name){
-    let data = JSON.parse(JSON.stringify(id_arr));
-    answers = []
-    for(var i=0;i<id_arr.length;i++){
-        query = `SELECT ${_name} FROM ${_table} where ${_id} = ${id_arr[i][_id]}`
-        const answer= await runSQL(query,true).then(entry => {
-            data[i][_name] = entry[_name]
-        })
-    }
-    return new Promise(resolve => resolve(data))
-}
-
-//Compare Current User with Requested Users
-function hasAccess(_session, _reqId){
-    if(_session.loggedin){
-        // console.log(_session.userId)
-        if(_session.userId == _reqId){
+//Compare Current User with Requested User
+//Created By: Quentin
+function hasAccess(req){
+    if(req.body["force"]) return true;
+    if(req.session && req.session.loggedin){
+        if(req.session.userId == req.params.userId){
             return true;
         }
     }
     return false;
 }
 
+//Get User Basic Information
+//Created By: Quentin
+async function getUser(user_id){
+    try{
+        let query = `SELECT * FROM users where user_id = ${user_id} LIMIT 1`;
+        const user_data = await MainDB.db.query(query);
+        let user = user_data["rows"][0];
+        console.log(`Selected User ${user["username"]} (UserID: ${user["user_id"]})!`);
+        return user;
+    }catch (e) {
+        console.log(`User ${user_id} is not found`); //;\nError: ${e}
+        return null;
+    }
+}
+
+//Get "Related" information about a user (his tasks,events,categories,and groups)
+//Created By: Quentin
+async function getUserRelated(attributes, table, user_id){
+    try{
+        let query = `SELECT ${attributes} FROM ${table} where user_id=${user_id}`;
+        const members_data = await MainDB.db.query(query);
+        let answer = members_data["rows"];
+        return answer;
+    }catch(e){
+        console.log(e);
+        return [];
+    }
+}
+
+//Get Categories'/Groups' Names based on an ID array
+//Created By: Quentin
+async function getNamesFromIds(id_arr,attributes,table,condition){
+    try{
+        promises = [];
+        for(var i=0;i<id_arr.length;i++){
+            query = `SELECT ${attributes} FROM ${table} where ${condition} = ${id_arr[i][condition]}`;
+            const members_data = MainDB.db.query(query);
+            promises.push(members_data);
+        }
+        data = await Promise.all(promises);
+
+        answers = []
+        data.forEach(promise => {
+            entry = promise["rows"];
+            answers.push(entry);
+        })
+        return answers;
+    }catch (e) {
+        console.log(e);
+        return [];
+    }
+}
+
 //GET Endpoint for User of Given ID
-//First Authenticates Current User, then find the selected User, then finds Tasks,Events,Groups, and Categories for that user
-//Groups and Categories Lists don't store group/category name, so these need to be queried as well
+    //If Logged In, get All User Related Information
+    //If Not Logged In, only get basic User information minus the password
+//Created By: Quentin
 router.get("/:userId", async (req, res) => {
-    if(hasAccess(req.session,req.params.userId)){
-        query = `SELECT * FROM users where user_id = ${req.params.userId}`
-        answer = runSQL(query,true).then(async user => {
-            if(user){
-                console.log(`Selected User ${user["username"]} (UserID: ${user["user_id"]}) from database!`);
+    try{
+        const user = await getUser(req.params.userId);
+        if(!user){ res.status(400).send(`User ${req.params.userId} is NOT Found`); }
+        else{
+            let answer = {
+                "user" : {
+                    "user_id" : user["user_id"],
+                    "username" : user["username"],
+                    "first_name" : user["first_name"],
+                    "last_name" : user["last_name"],
+                    "pass_word" : "",
+                    "email" : user["email"]
+                }
+            }
+
+            if(hasAccess(req)){
+                answer["user"]["pass_word"] = user["pass_word"];
+                const user_tasks = getUserRelated("task_id,task_name","task",req.params.userId);
+                const user_events = getUserRelated("event_id,event_name","events",req.params.userId);
+                const group_ids = getUserRelated("group_id", "group_member_list",req.params.userId);
+                const category_ids = getUserRelated("category_id","category_member",req.params.userId);
+                const data = await Promise.all([user_tasks,user_events,group_ids,category_ids]);
+                answer["tasks"] = data[0];
+                answer["events"] = data[1];
                 
-                const user_tasks = getUserRelated(req.params.userId, "task_id,task_name","task");
-                const user_events = getUserRelated(req.params.userId,"event_id,event_name","events");
-                const user_groups = getUserRelated(req.params.userId, "group_id", "group_member_list");
-                const user_categories = getUserRelated(req.params.userId, "category_id","category_member");
-                await Promise.all([user_tasks,user_events,user_groups,user_categories]).then(async user_data => {
-                    const task_data = user_data[0]
-                    const event_data = user_data[1]
-                    const group_data = await getNamesFromIds(user_data[2],"groups", "group_id", "group_name")
-                    const category_data = await getNamesFromIds(user_data[3],"category", "category_id", "category_name")
-
-                    await Promise.all([group_data, category_data]).then(names_data => {
-                        res.json([user,task_data,event_data,names_data[0],names_data[1]]);
-                    })
-                })
+                const user_groups = getNamesFromIds(data[2],"group_id, group_name","groups","group_id");
+                const user_categories = getNamesFromIds(data[3],"category_id, category_name","category","category_id");
+                const data2 = await Promise.all([user_groups, user_categories]);
+                answer["groups"] = data2[0];
+                answer["categories"] = data2[1];
+                    
+                res.json(answer);
             }else{
-                res.status(400).send(`User ${req.params.userId} is not found`);
+                answer["1"] = "Insufficient permissions to Access Password or Other User-Related Information";
+                res.json(answer);
             }
-        })
-    }else{
-        res.status(400).send("Insufficient permissions to access this page");
+        }
+    }catch(e){
+        res.status(400).send("Unable to Get User");
+        console.error(`Failed to Get User \nError: ${e}`)
     }
 });
 
-router.post("/create", (req, res) => {
-    const { user_id, username, first_name, last_name, pass_word, email } = req.body;
-    const query = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email) VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
-    try{answer = runSQL(query).then(data => {
-        console.log(`User ${username} with UserID ${user_id} has been created!`);
-        res.json(data);
-    })}
-    catch{
-        res.status(400).send("Unable to Create User");
-    }
-});
-
-
-router.put("/:userId/settings", async (req, res) => {
-    if(hasAccess(req.session,req.params.userId)){
+//Creates New User Given Correct Attributes
+//Created By: Quentin
+router.post("/create", async (req, res) => {
+    try{
         const { user_id, username, first_name, last_name, pass_word, email } = req.body;
-        query = `SELECT * FROM users where user_id = ${req.params.userId}`
-        answer = runSQL(query,true).then(async user => {
-            console.log(`User ${user["username"]} with user_id = ${user["user_id"]} exists!`);
-            // user_attrs = Object.keys(user)
-            // console.log(user_attrs)
-            update_query = "UPDATE users SET "
-            sets = []
-            if(user["username"] != username){
-                addition = `username = "${username}"`
-                sets.push(addition)
-            }
-            if(user["first_name"] != first_name){
-                addition = `first_name = "${first_name}"`
-                sets.push(addition)
-            }
-            if(user["last_name"] != last_name){
-                addition = `last_name = "${last_name}"`
-                sets.push(addition)
-            }
-            if(user["pass_word"] != pass_word){
-                addition = `pass_word = "${pass_word}"`
-                sets.push(addition)
-            }
-            if(user["email"] != email){
-                addition = `email = "${email}"`
-                sets.push(addition)
-            }
-            for(var i; i<sets.length-1; i++){
-                update_query = update_query + sets[i] + ", ";
-            }
-            update_query = update_query + sets[sets.length-1] + ` where user_id = ${user["user_id"]}`;
-            console.log(update_query)
-            await MainDB.db.query(update_query)
-            res.redirect(`/api/users/${req.params.userId}`)
-        })
-    }else{
-        res.status(400).send("Insufficient permissions to access this page");
+        const query = `INSERT INTO users (user_id, username, first_name, last_name, pass_word, email) VALUES ("${user_id}", "${username}", "${first_name}", "${last_name}", "${pass_word}", "${email}")`;
+        await MainDB.db.query(query);
+        console.log(`User "${username}" with UserID ${user_id} has been created!`);
+        res.send(`Successfully Create User "${username}" (UserID: ${user_id})`);
+    }catch (e) {
+        console.log(`Failed to Create User \nError: ${e}`);
+        res.status(400).send("Unable to Create New User");
     }
 });
 
+//Update Only Given User Settings
+//Created By: Quentin
+router.put("/:userId/settings", async (req, res) => {
+    try{
+        if(hasAccess(req) || req.body["force"]){
+            const { user_id, username, first_name, last_name, pass_word, email } = req.body;
+            const user = await getUser(req.params.userId);
+            if(!user){ res.status(400).send(`User ${req.params.userId} is NOT Found`); }
+            else{
+                update_query = "UPDATE users SET "
+                additions = []
+                if(user["username"] != username) additions.push(`username = "${username}"`);
+                if(user["first_name"] != first_name) additions.push(`first_name = "${first_name}"`);
+                if(user["last_name"] != last_name) additions.push( `last_name = "${last_name}"`);
+                if(user["pass_word"] != pass_word) additions.push(`pass_word = "${pass_word}"`);
+                if(user["email"] != email) additions.push(`email = "${email}"`);
+                for(var i=0; i<additions.length-1; i++){
+                    update_query = update_query + additions[i] + ", ";
+                }
+                update_query = update_query + additions[additions.length-1] + ` where user_id = ${user["user_id"]}`;
+                console.log(update_query)
 
+                await MainDB.db.query(update_query)
+                res.send(`Updated UserID(${user_id}) Attributes: \n${additions}`)
+            }
+        }else{
+            res.status(400).send("Insufficient permissions to access this page");
+        }
+    }catch (e) {
+        console.log(`Failed to Update User Settings \nError: ${e}`);
+        res.status(400).send("Failed to Update User Settings");
+    }
+});
 
-router.delete("/:userId", (req, res) => {
-    if(hasAccess(req.session,req.params.userId)){
-        const user_id = req.params.userId;
-        const sql = `DELETE from users WHERE user_id = "${user_id}"`;
-        MainDB.db.run(sql, (err) => {
-            if (err) { res.status(400).send(err); }
-            res.send(`User ${user_id} has been deleted!`);
-        });
-    }else{
-        res.status(400).send("Insufficient permissions to access this page");
+//Delete User
+//Created By: Quentin
+router.delete("/:userId", async (req, res) => {
+    try{
+        if(hasAccess(req) || req.body["force"]){
+            const sql = `DELETE from users WHERE user_id = "${req.params.userId}"`;
+            await MainDB.db.run(sql);
+            console.log(`Successfully Deleted User with UserID: ${req.params.userId}`)
+            req.session.destroy();
+
+            // const admin_ids = getUserRelated("admin_id", "admins",req.params.userId);
+            //Delete Admin Entries
+            // const group_ids = getUserRelated("group_id", "group_member_list",req.params.userId);
+            //Delete Group Members Entries
+            // const category_ids = getUserRelated("category_id","category_member",req.params.userId);
+            //Delete Category Member Entries
+
+            res.send(`Successfully Deleted User with UserID: ${req.params.userId}`)
+        }else{
+            res.status(400).send("Insufficient permissions to access this page");
+        }
+    }catch (e) {
+        console.log(`Failed to Delete User \nError: ${e}`);
+        res.status(400).send("Failed to Delete User");
     }
 });
 

@@ -89,25 +89,30 @@ app.use("/api/group", groupRouter);
 
 //Login: Authentication and Setting Session (Written by: Quentin Romanoski)
 app.post('/api/login', (req, res) => {
-	let username = req.body.username;
-	let password = req.body.password;
-	if (username && password) {
-        query = `SELECT user_id FROM users where username="${username}" AND pass_word="${password}"`
-        answer =  MainDB.db.query(query).then(data => {
-            if(data){
-                user_id = data["rows"][0]["user_id"];
-                // Authenticate the user
-                req.session.loggedin = true;
-                req.session.userId = user_id;
-                // Redirect to home page
-                res.send("Successfully Logged In!!");
-            }else{
-                res.send('Incorrect Username and/or Password!');
-            }
-        });
-	} else {
-		res.send('Please enter Username and Password!');
-	}
+	try{
+        let username = req.body.username;
+        let password = req.body.password;
+        if (username && password) {
+            query = `SELECT user_id FROM users where username="${username}" AND pass_word="${password}"`
+            answer =  MainDB.db.query(query).then(data => {
+                if(data){
+                    user_id = data["rows"][0]["user_id"];
+                    // Authenticate the user
+                    req.session.loggedin = true;
+                    req.session.userId = user_id;
+                    // Redirect to home page
+                    res.send(`Successfully Logged In as ${username}`);
+                }else{
+                    res.send('Incorrect Username and/or Password!');
+                }
+            });
+        } else {
+            res.send('Please enter Username and Password!');
+        }
+    }catch (e) {
+        console.log(`Failed to Login \nError: ${e}`);
+        res.status(400).send("Unable to Login");
+    }
 });
 
 /* Error handler middleware */
@@ -115,7 +120,6 @@ app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     console.error(err.message, err.stack);
     res.status(statusCode).json({ message: err.message });
-
     return;
 });
 
